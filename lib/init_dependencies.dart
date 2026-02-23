@@ -3,25 +3,29 @@ import 'package:dio/dio.dart';
 import 'package:live_tv/core/theme/cubit/theme_cubit.dart';
 import 'package:live_tv/features/premium_auth/domain/usecases/validate_premium_key.dart';
 import 'package:live_tv/features/premium_auth/presentation/cubit/premium_cubit.dart';
-import 'package:live_tv/features/udpate/data/datasources/update_remote_data_source.dart';
-import 'package:live_tv/features/udpate/data/repositories/update_repository_impl.dart';
-import 'package:live_tv/features/udpate/domain/repositories/update_repository.dart';
-import 'package:live_tv/features/udpate/domain/usecases/check_update_usecase.dart';
-import 'package:live_tv/features/udpate/presentation/cubit/update_cubit.dart';
+import 'package:live_tv/features/splash/data/datasources/update_remote_data_source.dart';
+import 'package:live_tv/features/splash/data/repositories/update_repository_impl.dart';
+import 'package:live_tv/features/splash/domain/repositories/update_repository.dart';
+import 'package:live_tv/features/splash/domain/usecases/check_update_usecase.dart';
+import 'package:live_tv/features/splash/presentation/cubit/update_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final serviceLocator = GetIt.instance;
+final sl = GetIt.instance;
 
 Future<void> initDependencies() async {
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
+
   _initCore();
-  _initUpdateFeature();
+  _initSplashFeature();
   _initPremiumAuth();
   _initLiveTv();
   _initAnime();
 }
 
 void _initCore() {
-  serviceLocator.registerLazySingleton(() => Dio());
-  serviceLocator.registerLazySingleton(() => ThemeCubit());
+  sl.registerLazySingleton(() => Dio());
+  sl.registerLazySingleton(() => ThemeCubit());
 }
 
 void _initLiveTv() {}
@@ -29,21 +33,19 @@ void _initLiveTv() {}
 void _initAnime() {}
 
 void _initPremiumAuth() {
-  serviceLocator
+  sl
     ..registerFactory(() => ValidatePremiumKey())
-    ..registerLazySingleton(() => PremiumCubit());
+    ..registerLazySingleton(
+      () => PremiumCubit(validatePremiumKey: sl(), sharedPreferences: sl()),
+    );
 }
 
-void _initUpdateFeature() {
-  serviceLocator
+void _initSplashFeature() {
+  sl
     ..registerFactory<UpdateRemoteDataSource>(
-      () => UpdateRemoteDataSourceImpl(serviceLocator()),
+      () => UpdateRemoteDataSourceImpl(sl()),
     )
-    ..registerFactory<UpdateRepository>(
-      () => UpdateRepositoryImpl(serviceLocator()),
-    )
-    ..registerFactory(() => CheckUpdateUseCase(serviceLocator()))
-    ..registerLazySingleton(
-      () => UpdateCubit(checkUpdateUseCase: serviceLocator()),
-    );
+    ..registerFactory<UpdateRepository>(() => UpdateRepositoryImpl(sl()))
+    ..registerFactory(() => CheckUpdateUseCase(sl()))
+    ..registerLazySingleton(() => UpdateCubit(checkUpdateUseCase: sl()));
 }

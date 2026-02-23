@@ -33,6 +33,9 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# App Secrets and API Keys
+lib/core/app_secrets.dart
+
 # Symbolication related
 app.*.symbols
 
