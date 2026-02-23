@@ -30,6 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.0       # State Management
+  get_it: ^7.2.0             # Dependency Injection
+  dio: ^5.0.0                # Networking
+  video_player: ^2.4.7       # Core Video engine
+  chewie: ^1.5.0             # Advanced UI for video player
+  dartz: ^0.10.1             # Functional programming (Either Left/Right)
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
