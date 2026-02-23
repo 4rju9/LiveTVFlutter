@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:live_tv/features/home/presentation/pages/home_page.dart';
 import 'package:live_tv/features/premium_auth/presentation/cubit/premium_cubit.dart';
 
 class PremiumActivationPage extends StatefulWidget {
@@ -21,9 +22,8 @@ class _PremiumActivationPageState extends State<PremiumActivationPage> {
   }
 
   void _navigateToHome() {
-    print(">>> SUCCESS: Navigating to Main Home Screen...");
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Welcome! Navigating to Home...')),
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 

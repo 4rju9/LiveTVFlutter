@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:live_tv/features/home/presentation/pages/home_page.dart';
 import 'package:live_tv/features/premium_auth/presentation/cubit/premium_cubit.dart';
 import 'package:live_tv/features/premium_auth/presentation/pages/premium_activation_page.dart';
 import 'package:live_tv/features/splash/presentation/cubit/update_cubit.dart';
@@ -74,12 +75,7 @@ class _SplashPageState extends State<SplashPage> {
             onPressed: () => _navigateToNext(),
             child: const Text('Later'),
           ),
-          ElevatedButton(
-            onPressed: () {
-              // Future step: Add url_launcher to open the APK link
-            },
-            child: const Text('Update Now'),
-          ),
+          ElevatedButton(onPressed: () {}, child: const Text('Update Now')),
         ],
       ),
     );
@@ -88,8 +84,15 @@ class _SplashPageState extends State<SplashPage> {
   void _navigateToNext() {
     final premiumCubit = context.read<PremiumCubit>();
     premiumCubit.checkPremiumStatus();
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const PremiumActivationPage()),
-    );
+    if (premiumCubit.state is PremiumStatus &&
+        (premiumCubit.state as PremiumStatus).isPremium) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const HomePage()),
+      );
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const PremiumActivationPage()),
+      );
+    }
   }
 }
