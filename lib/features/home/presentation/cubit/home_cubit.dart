@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/core/usecase/usecase.dart';
+import 'package:live_tv/features/home/domain/entities/anime_entity.dart';
 import 'package:live_tv/features/home/domain/entities/live_channel_entity.dart';
 import 'package:live_tv/features/home/domain/usecases/get_live_channels.dart';
 
@@ -11,27 +12,28 @@ class HomeLoading extends HomeState {}
 
 class HomeLoaded extends HomeState {
   final Map<String, List<LiveChannelEntity>> channelsMap;
-  HomeLoaded(this.channelsMap);
+  final AnimeDataEntity? animeData;
+
+  HomeLoaded(this.channelsMap, this.animeData);
 }
 
 class HomeError extends HomeState {
   final String message;
+
   HomeError(this.message);
 }
 
 class HomeCubit extends Cubit<HomeState> {
-  final GetLiveChannels getLiveChannels;
+  final GetLiveChannels _getLiveChannels;
 
-  HomeCubit({required this.getLiveChannels}) : super(HomeInitial());
+  HomeCubit(this._getLiveChannels) : super(HomeInitial());
 
-  Future<void> fetchChannels() async {
+  void fetchChannels() async {
     emit(HomeLoading());
-
-    final result = await getLiveChannels(NoParams());
-
+    final result = await _getLiveChannels(NoParams());
     result.fold(
       (failure) => emit(HomeError(failure.message)),
-      (channelsMap) => emit(HomeLoaded(channelsMap)),
+      (data) => emit(HomeLoaded(data.channelsMap, data.animeData)),
     );
   }
 }

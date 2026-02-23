@@ -40,7 +40,7 @@ void _initHome() {
     )
     ..registerFactory<HomeRepository>(() => HomeRepositoryImpl(sl()))
     ..registerFactory(() => GetLiveChannels(sl()))
-    ..registerLazySingleton(() => HomeCubit(getLiveChannels: sl()));
+    ..registerLazySingleton(() => HomeCubit(sl()));
 }
 
 void _initAnime() {}
