@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_tv/features/profile/presentation/pages/profile_page.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key});
@@ -52,8 +53,9 @@ class HomeHeader extends StatelessWidget {
           const SizedBox(width: 16),
           InkWell(
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Profile Settings coming soon!")),
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const ProfilePage()),
+                (route) => false,
               );
             },
             borderRadius: BorderRadius.circular(50),
