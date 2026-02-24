@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/features/player/domain/entities/stream_config.dart';
+import 'package:live_tv/features/player/domain/entities/anime_servers_entity.dart';
 import 'package:live_tv/features/player/domain/usecases/get_anime_stream.dart';
+import 'package:live_tv/features/player/domain/usecases/get_anime_servers.dart';
 
 abstract class PlayerState {}
 
@@ -10,7 +12,10 @@ class PlayerLoading extends PlayerState {}
 
 class PlayerLoaded extends PlayerState {
   final StreamConfig config;
-  PlayerLoaded(this.config);
+  final AnimeServersEntity? servers;
+  final AnimeServerInfo? activeServer;
+
+  PlayerLoaded(this.config, {this.servers, this.activeServer});
 }
 
 class PlayerError extends PlayerState {
@@ -20,19 +25,74 @@ class PlayerError extends PlayerState {
 
 class PlayerCubit extends Cubit<PlayerState> {
   final GetAnimeStream _getAnimeStream;
+  final GetAnimeServers _getAnimeServers;
 
-  PlayerCubit({required GetAnimeStream getAnimeStream})
-    : _getAnimeStream = getAnimeStream,
-      super(PlayerInitial());
+  PlayerCubit({
+    required GetAnimeStream getAnimeStream,
+    required GetAnimeServers getAnimeServers,
+  })  : _getAnimeStream = getAnimeStream,
+        _getAnimeServers = getAnimeServers,
+        super(PlayerInitial());
 
   void loadAnimeEpisode(String episodeId, String title) async {
     emit(PlayerLoading());
-    final result = await _getAnimeStream(
-      GetAnimeStreamParams(episodeId: episodeId, title: title),
-    );
-    result.fold(
+
+    final serversResult = await _getAnimeServers(episodeId);
+    serversResult.fold(
       (failure) => emit(PlayerError(failure.message)),
-      (config) => emit(PlayerLoaded(config)),
+      (servers) async {
+
+        AnimeServerInfo? defaultServer;
+        if (servers.sub.isNotEmpty) {
+          defaultServer = servers.sub.first;
+        } else if (servers.dub.isNotEmpty) {
+          defaultServer = servers.dub.first;
+        }
+
+        if (defaultServer == null) {
+          emit(PlayerError("No servers available for this episode."));
+          return;
+        }
+        
+        final streamResult = await _getAnimeStream(
+          GetAnimeStreamParams(
+            episodeId: episodeId,
+            title: title,
+            serverName: defaultServer.serverName,
+            category: defaultServer.type,
+          ),
+        );
+
+        streamResult.fold(
+          (failure) => emit(PlayerError(failure.message)),
+          (config) => emit(PlayerLoaded(
+            config,
+            servers: servers,
+            activeServer: defaultServer,
+          )),
+        );
+      },
+    );
+  }
+
+  void changeServer(String episodeId, String title, AnimeServersEntity servers, AnimeServerInfo newServer) async {
+    emit(PlayerLoading());
+    final streamResult = await _getAnimeStream(
+      GetAnimeStreamParams(
+        episodeId: episodeId,
+        title: title,
+        serverName: newServer.serverName,
+        category: newServer.type,
+      ),
+    );
+
+    streamResult.fold(
+      (failure) => emit(PlayerError(failure.message)),
+      (config) => emit(PlayerLoaded(
+        config,
+        servers: servers,
+        activeServer: newServer,
+      )),
     );
   }
 

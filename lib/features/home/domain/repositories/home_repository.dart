@@ -2,8 +2,14 @@ import 'package:dartz/dartz.dart';
 import 'package:live_tv/core/error/failures.dart';
 import 'package:live_tv/features/home/domain/entities/anime_details_entity.dart';
 import 'package:live_tv/features/home/domain/entities/home_data_entity.dart';
+import 'package:live_tv/features/home/domain/entities/anime_entity.dart';
 
 abstract class HomeRepository {
+  Future<Either<Failure, HomeDataEntity>> getCachedLiveChannels();
   Future<Either<Failure, HomeDataEntity>> getLiveChannels();
   Future<Either<Failure, AnimeDetailsEntity>> getAnimeDetails(String animeId);
+  Future<Either<Failure, List<AnimeEntity>>> searchAnime(
+    String keyword, {
+    int page = 1,
+  });
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:live_tv/features/home/presentation/cubit/home_cubit.dart';
 import 'package:live_tv/features/profile/presentation/pages/profile_page.dart';
 
 class HomeHeader extends StatelessWidget {
@@ -42,8 +44,12 @@ class HomeHeader extends StatelessWidget {
               ),
               child: TextField(
                 style: TextStyle(color: theme.primaryColor),
+                onChanged: (value) {
+                  // Only search if we are on the Anime tab or if you want global search
+                  context.read<HomeCubit>().executeAnimeSearch(value);
+                },
                 decoration: InputDecoration(
-                  hintText: 'Search channels...',
+                  hintText: 'Search anime...',
                   hintStyle: TextStyle(color: theme.primaryColor),
                   prefixIcon: Icon(Icons.search, color: theme.primaryColor),
                   border: InputBorder.none,

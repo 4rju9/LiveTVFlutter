@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/features/home/domain/entities/live_channel_entity.dart';
 import 'package:live_tv/features/home/presentation/cubit/home_cubit.dart';
+import 'package:live_tv/features/home/presentation/pages/anime_details_page.dart';
 import 'package:live_tv/features/home/presentation/pages/live_tv_player_page.dart';
 import 'package:live_tv/features/home/presentation/widgets/anime_section.dart';
 import 'package:live_tv/features/home/presentation/widgets/channel_card.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   late PageController _pageController;
 
   final List<String> _categories = [
@@ -102,6 +103,60 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                );
+              } else if (state is AnimeSearchLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is AnimeSearchLoaded) {
+                return GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.7,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemCount: state.results.length,
+                  itemBuilder: (context, i) {
+                    final anime = state.results[i];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AnimeDetailsPage(animeId: anime.id),
+                          ),
+                        );
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.network(
+                              anime.poster, 
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => const Icon(Icons.error),
+                            ),
+                            Positioned(
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                color: Colors.black.withValues(alpha: 0.7),
+                                child: Text(
+                                  anime.title,
+                                  style: const TextStyle(color: Colors.white, fontSize: 12),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               } else if (state is HomeLoaded) {
                 return PageView.builder(

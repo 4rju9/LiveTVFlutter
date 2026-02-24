@@ -12,12 +12,21 @@ class GetAnimeStream implements UseCase<StreamConfig, GetAnimeStreamParams> {
   Future<Either<Failure, StreamConfig>> call(
     GetAnimeStreamParams params,
   ) async {
-    return await repository.getAnimeStream(params.episodeId, params.title);
+    return await repository.getAnimeStream(
+        params.episodeId, params.title, params.serverName, params.category);
   }
 }
 
 class GetAnimeStreamParams {
   final String episodeId;
   final String title;
-  GetAnimeStreamParams({required this.episodeId, required this.title});
+  final String serverName;
+  final String category;
+
+  GetAnimeStreamParams({
+    required this.episodeId,
+    required this.title,
+    required this.serverName,
+    required this.category,
+  });
 }

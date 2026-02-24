@@ -1,0 +1,18 @@
+Launching lib/main.dart on Chrome in debug mode...
+Waiting for connection from debug service on Chrome...              9.7s
+
+Flutter run key commands.
+r Hot reload. 🔥🔥🔥
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+Debug service listening on ws://127.0.0.1:63734/zxa6PfgCB9k=/ws
+A Dart VM Service on Chrome is available at: http://127.0.0.1:63734/zxa6PfgCB9k=
+The Flutter DevTools debugger and profiler on Chrome is available at: http://127.0.0.1:63734/zxa6PfgCB9k=/devtools/?uri=ws://127.0.0.1:63734/zxa6PfgCB9k=/ws
+Starting application from main method in: org-dartlang-app:/web_entrypoint.dart.
+Got object store box in database homedatabox.
+Link: {file: https://fogtwist21.xyz/_v7/a684043aa044e8107434617d8cdd6e0015d1a951b5021410d9f8c4ed9f6bc9a310f88a7887b090f86f0d88fcc3a2853dbddf91a5c7c60a06eea6972cb2007ccc81fabd8919c67a7ac66a949ca89520854378a574810efb51ffbe6bde827ebf1aeec2d5175d0725b486c803aa24cad0ccd40432825db06cd6170adba2c1c3be27/master.m3u8, type: hls}
+Error initializing CustomVideoPlayer: PlatformException(MEDIA_ERR_NETWORK, networkError, manifestLoadError, null)

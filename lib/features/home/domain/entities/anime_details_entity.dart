@@ -10,6 +10,14 @@ class AnimeDetailsEntity {
     required this.seasons,
     required this.episodes,
   });
+
+  AnimeDetailsEntity copyWithEpisodes(List<EpisodeEntity> newEpisodes) {
+    return AnimeDetailsEntity(
+      anime: anime,
+      seasons: seasons,
+      episodes: newEpisodes,
+    );
+  }
 }
 
 class SeasonEntity {
