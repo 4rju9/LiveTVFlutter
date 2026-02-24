@@ -12,6 +12,7 @@ class ProfilePage extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(),
       body: ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
@@ -104,14 +105,9 @@ class ProfilePage extends StatelessWidget {
           const SizedBox(height: 16),
           BlocBuilder<ThemeCubit, ThemeData>(
             builder: (context, currentTheme) {
-              final List<Color> themeColors = [
-                const Color(0xFF00BEF7),
-                Colors.brown,
-              ];
-
               return Row(
-                children: List.generate(themeColors.length, (index) {
-                  final color = themeColors[index];
+                children: List.generate(ThemeCubit.themeList.length, (index) {
+                  final color = ThemeCubit.themeList[index].primaryColor;
                   final isSelected = currentTheme.primaryColor == color;
 
                   return GestureDetector(

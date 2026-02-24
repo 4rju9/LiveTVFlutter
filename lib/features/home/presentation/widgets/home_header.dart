@@ -35,14 +35,17 @@ class HomeHeader extends StatelessWidget {
             child: Container(
               height: 45,
               decoration: BoxDecoration(
-                color: isDark ? Colors.grey[800] : Colors.grey[100],
+                color: isDark
+                    ? theme.primaryColor.withValues(alpha: 0.15)
+                    : theme.primaryColorDark.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: TextField(
+                style: TextStyle(color: theme.primaryColor),
                 decoration: InputDecoration(
                   hintText: 'Search channels...',
-                  hintStyle: TextStyle(color: Colors.grey[500]),
-                  prefixIcon: Icon(Icons.search, color: Colors.grey[500]),
+                  hintStyle: TextStyle(color: theme.primaryColor),
+                  prefixIcon: Icon(Icons.search, color: theme.primaryColor),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 10),
                 ),
@@ -53,9 +56,8 @@ class HomeHeader extends StatelessWidget {
           const SizedBox(width: 16),
           InkWell(
             onTap: () {
-              Navigator.of(context).pushAndRemoveUntil(
+              Navigator.of(context).push(
                 MaterialPageRoute(builder: (context) => const ProfilePage()),
-                (route) => false,
               );
             },
             borderRadius: BorderRadius.circular(50),

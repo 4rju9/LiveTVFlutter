@@ -86,12 +86,14 @@ class _SplashPageState extends State<SplashPage> {
     premiumCubit.checkPremiumStatus();
     if (premiumCubit.state is PremiumStatus &&
         (premiumCubit.state as PremiumStatus).isPremium) {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const HomePage()),
+        (route) => false,
       );
     } else {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const PremiumActivationPage()),
+        (route) => false,
       );
     }
   }

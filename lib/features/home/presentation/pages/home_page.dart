@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/features/home/domain/entities/live_channel_entity.dart';
 import 'package:live_tv/features/home/presentation/cubit/home_cubit.dart';
+import 'package:live_tv/features/home/presentation/pages/live_tv_player_page.dart';
 import 'package:live_tv/features/home/presentation/widgets/anime_section.dart';
 import 'package:live_tv/features/home/presentation/widgets/channel_card.dart';
 import 'package:live_tv/features/home/presentation/widgets/home_header.dart';
@@ -39,14 +40,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onNavTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   IconData _getIcon(String category) {
@@ -154,9 +158,13 @@ class _HomePageState extends State<HomePage> {
                         return ChannelCard(
                           channel: channel,
                           onTap: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Playing: ${channel.title}"),
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LiveTvPlayerPage(
+                                  url: channel.url,
+                                  name: channel.title,
+                                ),
                               ),
                             );
                           },

@@ -29,7 +29,6 @@ class PremiumCubit extends Cubit<PremiumState> {
   }) : super(PremiumInitial());
 
   void checkPremiumStatus() {
-    // Use AppSecrets.prefsKeyIsPremium instead
     final isPremium =
         sharedPreferences.getBool(AppSecrets.prefsKeyIsPremium) ?? false;
     emit(PremiumStatus(isPremium: isPremium));
@@ -43,7 +42,6 @@ class PremiumCubit extends Cubit<PremiumState> {
     result.fold((failure) => emit(PremiumError(failure.message)), (
       success,
     ) async {
-      // Use AppSecrets.prefsKeyIsPremium instead
       await sharedPreferences.setBool(AppSecrets.prefsKeyIsPremium, true);
       emit(PremiumStatus(isPremium: true));
     });

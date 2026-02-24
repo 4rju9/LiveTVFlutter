@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/core/theme/cubit/theme_cubit.dart';
 import 'package:live_tv/features/home/presentation/cubit/home_cubit.dart';
+import 'package:live_tv/features/player/presentation/cubit/player_cubit.dart';
 import 'package:live_tv/features/premium_auth/presentation/cubit/premium_cubit.dart';
 import 'package:live_tv/features/splash/presentation/cubit/update_cubit.dart';
 import 'package:live_tv/features/splash/presentation/pages/splash_page.dart';
@@ -17,6 +18,7 @@ void main() async {
         BlocProvider(create: (_) => sl<UpdateCubit>()),
         BlocProvider(create: (_) => sl<PremiumCubit>()),
         BlocProvider(create: (_) => sl<HomeCubit>()),
+        BlocProvider(create: (_) => sl<PlayerCubit>()),
       ],
       child: const LiveTvApp(),
     ),

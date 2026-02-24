@@ -22,8 +22,9 @@ class _PremiumActivationPageState extends State<PremiumActivationPage> {
   }
 
   void _navigateToHome() {
-    Navigator.of(context).pushReplacement(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(builder: (context) => const HomePage()),
+      (route) => false,
     );
   }
 
