@@ -34,6 +34,9 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return BlocListener<UpdateCubit, UpdateState>(
       listener: (context, state) {
+        if (kIsWeb) {
+          _navigateToNext();
+        }
         if (state is UpdateFound && !kIsWeb) {
           _showUpdateDialog(
             context,
@@ -43,8 +46,6 @@ class _SplashPageState extends State<SplashPage> {
         } else if (state is NoUpdateFound) {
           _navigateToNext();
         } else if (state is UpdateError) {
-          _navigateToNext();
-        } else if (kIsWeb) {
           _navigateToNext();
         }
       },
@@ -87,21 +88,17 @@ class _SplashPageState extends State<SplashPage> {
   void _navigateToNext() {
     final premiumCubit = context.read<PremiumCubit>();
     premiumCubit.checkPremiumStatus();
-    print("checking for premium status");
     if (premiumCubit.state is PremiumStatus &&
         (premiumCubit.state as PremiumStatus).isPremium) {
-      print("Inside premium");
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const HomePage()),
         (route) => false,
       );
     } else {
-      print("Going to activation screen");
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => const PremiumActivationPage()),
         (route) => false,
       );
-      print("went to activation screen");
     }
   }
 }
