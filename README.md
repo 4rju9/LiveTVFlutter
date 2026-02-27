@@ -6,6 +6,19 @@ The app delivers **HLS (.m3u8) streaming**, subscription-based access (Free & Pr
 This project demonstrates **production-grade Flutter engineering**, not a demo or tutorial app.
 
 ---
+## 📸 Screenshots
+
+| Splash Screen | Activation Screen | Profile Screen |
+|------|------|-----------|
+| ![Splash Screen](screenshots/splash.png) | ![Activation Screen](screenshots/activationscreen.png) | ![Profile Screen](screenshots/profile.png) |
+
+| Anime | Anime Detail | Anime Streaming | Anime Search |
+|-------------|-------------|-------------|---------|
+| ![Anime](screenshots/anime.png) | ![Anime Detail](screenshots/animedetail.png) | ![Anime Streaming](screenshots/animestreaming.png) | ![Anime Search](screenshots/animesearch.png) |
+
+| Live Channels | Live channels Streaming |
+|-------------|-------------|
+| ![Live Channels](screenshots/livechannels.png) | ![Live Channels Streaming](screenshots/livestreaming.png) |
 
 ## 🚀 Key Features
 
