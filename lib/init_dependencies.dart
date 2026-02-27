@@ -30,8 +30,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sl = GetIt.instance;
 
 Future<void> initDependencies() async {
-  await Hive.initFlutter();
   final sharedPreferences = await SharedPreferences.getInstance();
+
+  await Hive.initFlutter();
+  final box = await Hive.openBox('blogs');
+
+  sl.registerLazySingleton(() => box);
   sl.registerLazySingleton(() => sharedPreferences);
 
   _initCore();
@@ -49,9 +53,7 @@ void _initCore() {
 
 void _initHome() {
   sl
-    ..registerFactory<HomeLocalDataSource>(
-      () => HomeLocalDataSourceImpl(),
-    )
+    ..registerFactory<HomeLocalDataSource>(() => HomeLocalDataSourceImpl())
     ..registerFactory<HomeRemoteDataSource>(
       () => HomeRemoteDataSourceImpl(sl(), sl()),
     )
@@ -72,7 +74,9 @@ void _initPlayer() {
     ..registerFactory<PlayerRepository>(() => PlayerRepositoryImpl(sl()))
     ..registerFactory(() => GetAnimeServers(sl()))
     ..registerFactory(() => GetAnimeStream(sl()))
-    ..registerLazySingleton(() => PlayerCubit(getAnimeStream: sl(), getAnimeServers: sl()));
+    ..registerLazySingleton(
+      () => PlayerCubit(getAnimeStream: sl(), getAnimeServers: sl()),
+    );
 }
 
 void _initAnime() {}

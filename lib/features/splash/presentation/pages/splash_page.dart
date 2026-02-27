@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:live_tv/features/home/presentation/pages/home_page.dart';
@@ -17,7 +18,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _initApp();
+    if (!kIsWeb) {
+      _initApp();
+    }
   }
 
   Future<void> _initApp() async {
